@@ -75,7 +75,6 @@ body {
   text-align: center;
 }
 .td_guage canvas {
-  margin-top: 20px;
   width: 100%;
   height: 100%;
 }
@@ -84,4 +83,11 @@ body {
   left: 0px; right: 0px; top: 50%;
   font-size: 40px;
   color: #09F;
+}
+.td_graph {
+  text-align: center;
+}
+.td_graph canvas {
+  width: 100%;
+  height: 100%;
 }

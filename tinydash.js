@@ -59,16 +59,53 @@ var TD = {
       c.width = c.clientWidth;
       c.height = c.clientHeight;
       var s = Math.min(c.width,c.height);
-      ctx.lineWidth=20;
+      ctx.lineCap="round";
       ctx.clearRect(0,0,c.width,c.height);
       ctx.beginPath();
+      ctx.lineWidth=20;
       ctx.strokeStyle = "#000";
-      ctx.arc(s/2, s/2, (s/2)-24, Math.PI*0.75, 2.25 * Math.PI);
+      ctx.arc(s/2, s/2+20, (s/2)-24, Math.PI*0.75, 2.25 * Math.PI);
       ctx.stroke();
       ctx.beginPath();
+      ctx.lineWidth=16;
       ctx.strokeStyle = LIGHTCOL;
       var v = 0.2;
-      ctx.arc(s/2, s/2, (s/2)-24, Math.PI*0.75, (0.75+(1.5*v))*Math.PI);
+      ctx.arc(s/2, s/2+20, (s/2)-24, Math.PI*0.75, (0.75+(1.5*v))*Math.PI);
+      ctx.stroke();
+    }
+    setTimeout(draw,100);
+    g.onresize = draw;
+    return g;
+  };
+  /* {label}*/
+  TD.graph= function(opts) {
+    var g = setup(opts,toElement('<div class="td td_graph"><span>'+opts.label+'</span><canvas></canvas></div>'));
+    var c = g.getElementsByTagName("canvas")[0];
+    var ctx = c.getContext("2d");
+    function draw() {
+      c.width = c.clientWidth;
+      c.height = c.clientHeight;
+      var s = Math.min(c.width,c.height);
+      var xbase = 18;
+      var ybase = c.height-18;
+      var xs = (c.width-8-xbase);
+      var ys = (ybase-28);
+      ctx.fillStyle = "#000";
+      ctx.fillRect(4,24,c.width-8,c.height-28);
+      ctx.beginPath();
+      ctx.strokeStyle = LIGHTCOL;
+      for (var i=0;i<100;i++) {
+        var v = (Math.cos(i/10)+1)/2;
+        ctx.lineTo(xbase+(xs*i/100),ybase-v*ys);
+      }
+      ctx.stroke();
+      // axes
+      ctx.beginPath();
+      ctx.strokeStyle = "#fff";
+      ctx.moveTo(xbase,ybase-ys);
+      ctx.lineTo(xbase,ybase+10);
+      ctx.moveTo(xbase-10,ybase);
+      ctx.lineTo(xbase+xs,ybase);
       ctx.stroke();
     }
     setTimeout(draw,100);
