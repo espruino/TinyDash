@@ -50,6 +50,7 @@ body {
   height: 34px;
   padding: 10px;
   cursor: pointer;
+  user-select: none;
 }
 .td_btn_a:hover { background-color: #036; }
 .td_btn[pressed="1"] .td_btn_a { color: #09F; }
