@@ -1,13 +1,11 @@
-/* All elements have x/y/width/height
+/* All elements have x/y/width/height,name
 
   TODO:
     terminal
     graph
     dial
 */
-var TD = {
-  elements : []
-};
+var TD = {};
 (function() {
   var LIGHTCOL = "#09F";
   function toElement(html) {
@@ -18,14 +16,41 @@ var TD = {
   function togglePressed(el) {
     el.pressed = 0|!+el.getAttribute("pressed");
     el.setAttribute("pressed", el.pressed);
+    if (el.name) {
+      var o = {};
+      o[el.name] = el.pressed;
+      handleChange(o);
+    }
+  }
+  function formatText(txt) {
+    if ("number"!=typeof txt)
+      return txt;
+    if (Math.floor(txt)==txt) return txt; // ints
+    if (Math.abs(txt)>1000) return txt.toFixed(0);
+    if (Math.abs(txt)>100) return txt.toFixed(1);
+    return txt.toFixed(2);
   }
   /// set up position/etc on the html element
   function setup(opts, el) {
-    TD.elements.push(el);
     el.style="width:"+opts.width+"px;height:"+opts.height+"px;left:"+opts.x+"px;top:"+opts.y+"px;";
+    if (opts.name!==undefined) el.name=opts.name;
     return el;
   }
+  function handleChange(data) {
+    console.log("Change", data);
+  }
 
+  // --------------------------------------------------------------------------
+  /* Update any named elements with the new data */
+  TD.update= function(data) {
+    var els = document.getElementsByClassName("td");
+    for (var i in els) {
+      if (els[i].name && els[i].setValue && els[i].name in data)
+        els[i].setValue(data[els[i].name]);
+    }
+  }
+
+  // --------------------------------------------------------------------------
   TD.label = function(opts) {
     return setup(opts,toElement('<div class="td td_label"><span>Hello</span></div>'));
   };
@@ -61,7 +86,7 @@ var TD = {
     var v = (opts.value===undefined)?"?":opts.value;
     var el = setup(opts,toElement('<div class="td td_val"><span>'+opts.label+'</span><div class="td_val_a">'+v+'</div></div>'));
     el.setValue = function(v) {
-      el.getElementsByClassName("td_val_a")[0].innerHTML = v;
+      el.getElementsByClassName("td_val_a")[0].innerHTML = formatText(v);
     };
     return el;
   };
@@ -98,7 +123,7 @@ var TD = {
     el.onresize = draw;
     el.setValue = function(v) {
       el.value = v;
-      el.getElementsByClassName("td_guage_a")[0].innerHTML = v;
+      el.getElementsByClassName("td_guage_a")[0].innerHTML = formatText(v);
       draw();
     };
     return el;
@@ -145,4 +170,5 @@ var TD = {
     var el = setup(opts,toElement('<div class="td td_log"><span>'+opts.label+'</span><div class="td_log_a td_scrollable">'+lines.join("<br/>\n")+'</div></div>'));
     return el;
   };
+
 })();

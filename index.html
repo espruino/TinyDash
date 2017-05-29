@@ -7,12 +7,15 @@
    <script>
      var l,t,v,b,g;
      document.body.appendChild(l=TD.label({x:10,y:10,width:200,height:130}));
-     document.body.appendChild(t=TD.toggle({x:10,y:150,width:200,height:60,label:"Toggle",value:1}));
+     document.body.appendChild(t=TD.toggle({x:10,y:150,width:200,height:60,label:"Toggle",value:1,name:"toggle"}));
      document.body.appendChild(v=TD.value({x:10,y:220,width:200,height:60,label:"Value",value:"1.234"}));
-     document.body.appendChild(b=TD.button({x:10,y:290,width:200,height:100,label:"Press Me",value:0}));
-     document.body.appendChild(g=TD.guage({x:220,y:10,width:200,height:200,label:"A Guage",value:25,min:0,max:100}));
+     document.body.appendChild(b=TD.button({x:10,y:290,width:200,height:100,label:"Press Me",value:0,name:"button"}));
+     document.body.appendChild(g=TD.guage({x:220,y:10,width:200,height:200,label:"A Guage",value:25,min:0,max:100,name:"guage"}));
      document.body.appendChild(TD.graph({x:220,y:220,width:400,height:170,label:"A Graph"}));
      document.body.appendChild(TD.log({x:430,y:10,width:190,height:200,label:"A Log"}));
+     setInterval(function() {
+       TD.update({guage : 40*Math.sin(Date.now()/1000)+50});
+     }, 100);
    </script>
  </body>
 </html>
