@@ -112,4 +112,10 @@ var TD = {
     g.onresize = draw;
     return g;
   };
+  /* {label}*/
+  TD.log= function(opts) {
+    var lines = ["This is a test","of logging","in multiple lines"];
+    for (var i=0;i<10;i++) lines.push(i);
+    return setup(opts,toElement('<div class="td td_log"><span>'+opts.label+'</span><div class="td_log_a td_scrollable">'+lines.join("<br/>\n")+'</div></div>'));
+  };
 })();
