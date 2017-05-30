@@ -33,6 +33,7 @@ var TD = {};
   /// set up position/etc on the html element
   function setup(opts, el) {
     el.style="width:"+opts.width+"px;height:"+opts.height+"px;left:"+opts.x+"px;top:"+opts.y+"px;";
+    el.opts = opts;
     if (opts.name!==undefined) el.name=opts.name;
     return el;
   }

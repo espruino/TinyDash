@@ -6,6 +6,7 @@
   bottom: 0px;
   border: 2px solid #888;
   background-color: rgba(0,0,0,0.5);
+  user-select: none;
 }
 .tdedit:hover {
   background-color: rgba(64,64,64,0.5);
