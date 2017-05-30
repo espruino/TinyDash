@@ -1,0 +1,29 @@
+.tdedit {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  border: 2px solid #888;
+  background-color: rgba(0,0,0,0.5);
+}
+.tdedit:hover {
+  background-color: rgba(64,64,64,0.5);
+}
+.tdeicon {
+  position: absolute;
+  font-size: 200%;
+  cursor: pointer;
+}
+.tdemove {
+  top: 0px;
+  left: 4px;
+}
+.tderesize {
+  bottom: 0px;
+  right: 4px;
+}
+.tdedelete {
+  top: 0px;
+  right: 4px;
+}

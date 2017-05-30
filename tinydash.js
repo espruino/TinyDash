@@ -44,7 +44,7 @@ var TD = {};
   /* Update any named elements with the new data */
   TD.update= function(data) {
     var els = document.getElementsByClassName("td");
-    for (var i in els) {
+    for (var i=0;i<els.length;i++) {
       if (els[i].name && els[i].setValue && els[i].name in data)
         els[i].setValue(data[els[i].name]);
     }

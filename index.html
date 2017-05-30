@@ -4,6 +4,8 @@
  <body>
    <link href="tinydash.css" rel="stylesheet">
    <script src="tinydash.js"></script>
+   <link href="tinydash_editor.css" rel="stylesheet">
+   <script src="tinydash_editor.js"></script>
    <script>
      var l,t,v,b,g;
      document.body.appendChild(l=TD.label({x:10,y:10,width:200,height:130}));
@@ -16,6 +18,7 @@
      setInterval(function() {
        TD.update({guage : 40*Math.sin(Date.now()/1000)+50});
      }, 100);
+     TD.startEditor();
    </script>
  </body>
 </html>
