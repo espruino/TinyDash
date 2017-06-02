@@ -20,6 +20,7 @@
     for (var i=0;i<els.length;i++) {
       var editor = toElement('<div class="tdedit"><div class="tdeicon tdemove">&#x270B</div><div class="tdeicon tderesize">&#x21F2</div><div class="tdeicon tdedelete">&#x2612</div></div>');
       els[i].appendChild(editor);
+      editor.onmousedown = function(e) { dragStart(this, e, ""); };
     }
     els = document.getElementsByClassName("tdemove");
     for (var i=0;i<els.length;i++)
@@ -31,15 +32,18 @@
   TD.stopEditor = function() {
     editing = false;
     var els = document.getElementsByClassName("tdedit");
-    for (var i=0;i<els.length;i++)
+    for (var i=els.length-1;i>=0;i--)
       els[i].remove();
   };
 
   function dragStart(el, e, type) {
-    editingElement = el.parentElement.parentElement;
+    editingElement = el.classList.contains("tdeicon") ?
+      el.parentElement.parentElement :
+      el.parentElement;
     editingType = type;
     lastMousePos = [e.screenX, e.screenY];
     e.preventDefault();
+    e.stopPropagation();
   }
 
   function dragHandler(obj, dx, dy, xattr, yattr) {
@@ -68,9 +72,15 @@
       editingElement.style.top = editingElement.opts.y+"px";
       editingElement.style.width = editingElement.opts.width+"px";
       editingElement.style.height = editingElement.opts.height+"px";
+      if (editingElement.onresize)
+        editingElement.onresize();
     }
   });
   window.addEventListener("mouseup", function(e) {
+    if (!editingElement) {
+      console.log("Click on background -> disable editor");
+      TD.stopEditor();
+    }
     editingElement = undefined;
     editingType = undefined;
   });
