@@ -16,10 +16,20 @@ var TD = {};
   function togglePressed(el) {
     el.pressed = 0|!+el.getAttribute("pressed");
     el.setAttribute("pressed", el.pressed);
-    if (el.name) {
+    if (el.opts.name) {
       var o = {};
-      o[el.name] = el.pressed;
+      o[el.opts.name] = el.pressed;
       handleChange(o);
+    }
+    if (el.opts.onchange) {
+      el.opts.onchange(el,el.pressed);
+    }
+    if (!el.toggle) {
+      // non-toggleable elements always go back to not pressed
+      el.pressed = 0;
+      setTimeout(function() {
+        el.setAttribute("pressed", 0);
+      }, 200);
     }
   }
   function formatText(txt) {
@@ -34,7 +44,6 @@ var TD = {};
   function setup(opts, el) {
     el.style="width:"+opts.width+"px;height:"+opts.height+"px;left:"+opts.x+"px;top:"+opts.y+"px;";
     el.opts = opts;
-    if (opts.name!==undefined) el.name=opts.name;
     return el;
   }
   function handleChange(data) {
@@ -46,8 +55,8 @@ var TD = {};
   TD.update= function(data) {
     var els = document.getElementsByClassName("td");
     for (var i=0;i<els.length;i++) {
-      if (els[i].name && els[i].setValue && els[i].name in data)
-        els[i].setValue(data[els[i].name]);
+      if (els[i].opts.name && els[i].setValue && els[i].opts.name in data)
+        els[i].setValue(data[els[i].opts.name]);
     }
   }
 
@@ -55,7 +64,7 @@ var TD = {};
   TD.label = function(opts) {
     return setup(opts,toElement('<div class="td td_label"><span>Hello</span></div>'));
   };
-  /* {label, glyph, value}*/
+  /* {label, glyph, value, toggle}*/
   TD.button= function(opts) {
     var pressed = opts.value?1:0;
     opts.glyph = opts.glyph || "&#x1f4a1;";
@@ -73,6 +82,7 @@ var TD = {};
   TD.toggle= function(opts) {
     var pressed = opts.value?1:0;
     var el = setup(opts,toElement('<div class="td td_toggle" pressed="'+pressed+'"><span>'+opts.label+'</span><div class="td_toggle_a"><div class="td_toggle_b"/></div></div>'));
+    el.toggle = true;
     el.getElementsByClassName("td_toggle_a")[0].onclick = function() {
       togglePressed(el);
     };
@@ -134,7 +144,7 @@ var TD = {};
     var el = setup(opts,toElement('<div class="td td_graph"><span>'+opts.label+'</span><canvas></canvas></div>'));
     var c = el.getElementsByTagName("canvas")[0];
     var ctx = c.getContext("2d");
-    function draw() {
+    el.draw = function() {
       c.width = c.clientWidth;
       c.height = c.clientHeight;
       var s = Math.min(c.width,c.height);
@@ -160,8 +170,8 @@ var TD = {};
       ctx.lineTo(xbase+xs,ybase);
       ctx.stroke();
     }
-    setTimeout(draw,100);
-    el.onresize = draw;
+    setTimeout(el.draw,100);
+    el.onresize = el.draw;
     return el;
   };
   /* {label}*/
@@ -169,6 +179,20 @@ var TD = {};
     var lines = ["This is a test","of logging","in multiple lines"];
     for (var i=0;i<10;i++) lines.push(i);
     var el = setup(opts,toElement('<div class="td td_log"><span>'+opts.label+'</span><div class="td_log_a td_scrollable">'+lines.join("<br/>\n")+'</div></div>'));
+    return el;
+  };
+  /* {label}*/
+  TD.modal= function(opts) {
+    var el = setup(opts,toElement('<div class="td td_modal"><span>'+opts.label+'</span></div>'));
+    el.onclick = function() {
+      togglePressed(el);
+      if (!el.opts.onchange)
+        el.remove();
+    };
+    el.remove = function() {
+      if (el.parentNode)
+        el.parentNode.removeChild(el);
+    };
     return el;
   };
 

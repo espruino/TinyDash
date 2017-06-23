@@ -116,3 +116,14 @@ body {
   background-color: #000;
   overflow: auto;
 }
+.td_modal {
+  background-color: rgba(0,0,0,0.75);
+  border: 2px solid white;
+  cursor: pointer;
+  user-select: none;
+}
+.td_modal span {
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+}
