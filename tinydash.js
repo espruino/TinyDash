@@ -144,6 +144,10 @@ var TD = {};
     var el = setup(opts,toElement('<div class="td td_graph"><span>'+opts.label+'</span><canvas></canvas></div>'));
     var c = el.getElementsByTagName("canvas")[0];
     var ctx = c.getContext("2d");
+    el.setData = function(d) {
+      el.opts.data = d;
+      el.draw();
+    };
     el.draw = function() {
       c.width = c.clientWidth;
       c.height = c.clientHeight;
@@ -154,13 +158,32 @@ var TD = {};
       var ys = (ybase-28);
       ctx.fillStyle = "#000";
       ctx.fillRect(4,24,c.width-8,c.height-28);
-      ctx.beginPath();
-      ctx.strokeStyle = LIGHTCOL;
-      for (var i=0;i<100;i++) {
-        var v = (Math.cos(i/10)+1)/2;
-        ctx.lineTo(xbase+(xs*i/100),ybase-v*ys);
+      var dxmin,dxmax,dymin,dymax;
+      if (el.opts.data) {
+        for (var i in el.opts.data) {
+          var v = el.opts.data[i];
+          if (dxmin===undefined || i<dxmin) dxmin=i;
+          if (dxmax===undefined || i>dxmax) dxmax=i;
+          if (dymin===undefined || v<dymin) dymin=v;
+          if (dymax===undefined || v>dymax) dymax=v;
+        }
+        var dxs = dxmax-dxmin;
+        var dys = dymax-dymin;
+        if (dxs==0) dxs=1;
+        if (dys==0) dys=1;
+        ctx.beginPath();
+        ctx.strokeStyle = LIGHTCOL;
+        for (var i in el.opts.data) {
+          var v = el.opts.data[i];
+          ctx.lineTo(xbase+(xs*(i-dxmin)/dxs),
+                     ybase-(ys*(v-dymin)/dys));
+        }
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = "#888";
+        ctx.textAlign = "center";
+        ctx.fillText("[No Data]", xbase+(xs/2), ybase-(ys/2));
       }
-      ctx.stroke();
       // axes
       ctx.beginPath();
       ctx.strokeStyle = "#fff";
