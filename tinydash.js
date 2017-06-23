@@ -61,8 +61,9 @@ var TD = {};
   }
 
   // --------------------------------------------------------------------------
+  /* {label} */
   TD.label = function(opts) {
-    return setup(opts,toElement('<div class="td td_label"><span>Hello</span></div>'));
+    return setup(opts,toElement('<div class="td td_label"><span>'+opts.label+'</span></div>'));
   };
   /* {label, glyph, value, toggle}*/
   TD.button= function(opts) {

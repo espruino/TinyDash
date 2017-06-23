@@ -5,13 +5,13 @@
  <body>
    <link href="tinydash.css" rel="stylesheet">
    <script src="tinydash.js"></script>
-   <!--<link href="tinydash_editor.css" rel="stylesheet">
-   <script src="tinydash_editor.js"></script>-->
+   <link href="tinydash_editor.css" rel="stylesheet">
+   <script src="tinydash_editor.js"></script>
    <script>
      var data = [];
      for (var i=0;i<100;i++) data.push(Math.cos(i/10));
      var l,t,v,b,g;
-     document.body.appendChild(l=TD.label({x:10,y:10,width:200,height:130}));
+     document.body.appendChild(l=TD.label({x:10,y:10,width:200,height:130,label:"Test Page"}));
      document.body.appendChild(t=TD.toggle({x:10,y:150,width:200,height:60,label:"Toggle",value:1,name:"toggle"}));
      document.body.appendChild(v=TD.value({x:10,y:220,width:200,height:60,label:"Value",value:"1.234"}));
      document.body.appendChild(b=TD.button({x:10,y:290,width:200,height:100,label:"Press Me",value:0,name:"button",onchange:function(){alert("woop")}}));
