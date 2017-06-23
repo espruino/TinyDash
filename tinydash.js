@@ -1,8 +1,8 @@
+/* Copyright (c) 2017, Gordon Williams, MPLv2 License. https://github.com/espruino/TinyDash */
 /* All elements have x/y/width/height,name
 
   TODO:
     terminal
-    graph
     dial
 */
 var TD = {};
