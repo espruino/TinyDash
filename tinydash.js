@@ -93,13 +93,31 @@ var TD = {};
     };
     return el;
   };
-  /* {label,value}*/
+  /* {label,value,step,min,max}
+    if step is specified, clickable up/down arrows are added */
   TD.value= function(opts) {
-    var v = (opts.value===undefined)?"?":opts.value;
-    var el = setup(opts,toElement('<div class="td td_val"><span>'+opts.label+'</span><div class="td_val_a">'+v+'</div></div>'));
+    var html;
+    opts.value = parseFloat(opts.value);
+    if (opts.step)
+      html = '<div class="td_val_b">&#9664;</div><div class="td_val_a"></div><div class="td_val_b">&#9654;</div>';
+    else html = '<div class="td_val_a"></div>';
+    var el = setup(opts,toElement('<div class="td td_val"><span>'+opts.label+'</span>'+html+'</div>'));
     el.setValue = function(v) {
+      if (opts.min && v<opts.min) v=opts.min;
+      if (opts.max && v>opts.max) v=opts.max;
+      opts.value = v;
       el.getElementsByClassName("td_val_a")[0].innerHTML = formatText(v);
     };
+    if (opts.step) {
+      var b = el.getElementsByClassName("td_val_b");
+      b[0].onclick = function(e) {
+        el.setValue(opts.value-opts.step);
+      };
+      b[1].onclick = function(e) {
+        el.setValue(opts.value+opts.step);
+      };
+    }
+    el.setValue(opts.value);
     return el;
   };
   /* {label,value,min,max}*/

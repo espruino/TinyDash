@@ -81,11 +81,26 @@ body {
 .td_val {
   text-align: center;
 }
+.td_val div {
+  display:inline-block;
+}
 .td_val_a {
   margin-top: 20px;
   font-size: 20px;
   color: #09F;
 }
+.td_val_b {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 20px;
+  color: #09F;
+  cursor: pointer;
+  user-select: none;
+}
+.td_val_b:hover {
+  color:#fff;
+}
+
 
 .td_guage {
   text-align: center;
