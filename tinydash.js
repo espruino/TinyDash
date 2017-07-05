@@ -210,6 +210,7 @@ var TD = {};
     el.log = function(txt) {
       opts.text += "\n"+txt;
       el.update();
+      el.scrollTo(0,el.scrollHeight)
     };
     el.clear = function() {
       opts.text = "";
