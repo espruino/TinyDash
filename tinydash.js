@@ -198,11 +198,23 @@ var TD = {};
     el.onresize = el.draw;
     return el;
   };
-  /* {label}*/
+  /* {label,text}
+    text = newline separated linex
+  */
   TD.log= function(opts) {
-    var lines = ["This is a test","of logging","in multiple lines"];
-    for (var i=0;i<10;i++) lines.push(i);
-    var el = setup(opts,toElement('<div class="td td_log"><span>'+opts.label+'</span><div class="td_log_a td_scrollable">'+lines.join("<br/>\n")+'</div></div>'));
+    if (!opts.text) opts.text="";
+    var el = setup(opts,toElement('<div class="td td_log"><span>'+opts.label+'</span><div class="td_log_a td_scrollable"></div></div>'));
+    el.update = function() {
+      el.getElementsByClassName("td_log_a")[0].innerHTML = opts.text.replace(/\n/g,"<br/>\n");
+    };
+    el.log = function(txt) {
+      opts.text += "\n"+txt;
+      el.update();
+    };
+    el.clear = function() {
+      opts.text = "";
+      el.update();
+    };
     return el;
   };
   /* {label}*/

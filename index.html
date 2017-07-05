@@ -10,15 +10,18 @@
    <script>
      var data = [];
      for (var i=0;i<100;i++) data.push(Math.cos(i/10));
-     var l,t,v,b,g;
-     document.body.appendChild(l=TD.label({x:10,y:10,width:200,height:130,label:"Test Page"}));
-     document.body.appendChild(t=TD.toggle({x:10,y:150,width:200,height:60,label:"Toggle",value:1,name:"toggle"}));
-     document.body.appendChild(v=TD.value({x:10,y:220,width:200,height:60,label:"Value",value:"1.234"}));
-     document.body.appendChild(b=TD.button({x:10,y:290,width:200,height:100,label:"Press Me",value:0,name:"button",onchange:function(){alert("woop")}}));
-     document.body.appendChild(g=TD.guage({x:220,y:10,width:200,height:200,label:"A Guage",value:25,min:0,max:100,name:"guage"}));
-     document.body.appendChild(TD.graph({x:220,y:220,width:400,height:170,label:"A Graph",data:data}));
-     document.body.appendChild(TD.log({x:430,y:10,width:190,height:200,label:"A Log"}));
-     //document.body.appendChild(TD.modal({x:10,y:10,width:400,height:400,label:"Click to connect",onchange:function(el) {alert("Clicky");el.remove()}}));
+     var o = {
+       l:TD.label({x:10,y:10,width:200,height:130,label:"Test Page"}),
+       t:TD.toggle({x:10,y:150,width:200,height:60,label:"Toggle",value:1,name:"toggle"}),
+       v:TD.value({x:10,y:220,width:200,height:60,label:"Value",value:"1.234"}),
+       b:TD.button({x:10,y:290,width:200,height:100,label:"Press Me",value:0,name:"button",onchange:function(e){o.log.log("Pressed!");}}),
+       g:TD.guage({x:220,y:10,width:200,height:200,label:"A Guage",value:25,min:0,max:100,name:"guage"}),
+       gr:TD.graph({x:220,y:220,width:400,height:170,label:"A Graph",data:data}),
+       log:TD.log({x:430,y:10,width:190,height:200,label:"A Log",text:"A\nB\nC"}),
+       modal:TD.modal({x:10,y:10,width:400,height:400,label:"Click to connect",onchange:function(el) {o.log.log("Modal clicked");el.remove()}})
+     };
+     o.log.log("Hello");
+     for (var i in o) document.body.appendChild(o[i]);
      setInterval(function() {
        TD.update({guage : 40*Math.sin(Date.now()/1000)+50});
      }, 100);
