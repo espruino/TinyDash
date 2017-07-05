@@ -1,9 +1,12 @@
 /* Copyright (c) 2017, Gordon Williams, MPLv2 License. https://github.com/espruino/TinyDash */
 /* All elements have x/y/width/height,name
 
+  Elements that can be changed can also have `onchanged`
+
   TODO:
     terminal
     dial
+    scrollbar
 */
 var TD = {};
 (function() {
@@ -13,17 +16,20 @@ var TD = {};
     div.innerHTML = html;
     return div.childNodes[0];
   }
-  function togglePressed(el) {
-    el.pressed = 0|!+el.getAttribute("pressed");
-    el.setAttribute("pressed", el.pressed);
+  function sendChanges(el, value) {
     if (el.opts.name) {
       var o = {};
-      o[el.opts.name] = el.pressed;
+      o[el.opts.name] = value;
       handleChange(o);
     }
     if (el.opts.onchange) {
-      el.opts.onchange(el,el.pressed);
+      el.opts.onchange(el, value);
     }
+  }
+  function togglePressed(el) {
+    el.pressed = 0|!+el.getAttribute("pressed");
+    el.setAttribute("pressed", el.pressed);
+    sendChanges(el, el.pressed);
     if (!el.toggle) {
       // non-toggleable elements always go back to not pressed
       el.pressed = 0;
@@ -105,7 +111,10 @@ var TD = {};
     el.setValue = function(v) {
       if (opts.min && v<opts.min) v=opts.min;
       if (opts.max && v>opts.max) v=opts.max;
-      opts.value = v;
+      if (opts.value != v) {
+        sendChanges(el, el.pressed);
+        opts.value = v;
+      }
       el.getElementsByClassName("td_val_a")[0].innerHTML = formatText(v);
     };
     if (opts.step) {
