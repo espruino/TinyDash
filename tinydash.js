@@ -58,7 +58,7 @@ var TD = {};
 
   // --------------------------------------------------------------------------
   /* Update any named elements with the new data */
-  TD.update= function(data) {
+  TD.update = function(data) {
     var els = document.getElementsByClassName("td");
     for (var i=0;i<els.length;i++) {
       if (els[i].opts.name && els[i].setValue && els[i].opts.name in data)
@@ -72,7 +72,7 @@ var TD = {};
     return setup(opts,toElement('<div class="td td_label"><span>'+opts.label+'</span></div>'));
   };
   /* {label, glyph, value, toggle}*/
-  TD.button= function(opts) {
+  TD.button = function(opts) {
     var pressed = opts.value?1:0;
     opts.glyph = opts.glyph || "&#x1f4a1;";
     var el = setup(opts,toElement('<div class="td td_btn" pressed="'+pressed+'"><span>'+opts.label+'</span><div class="td_btn_a">'+opts.glyph+'</div></div>'));
@@ -86,7 +86,7 @@ var TD = {};
     return el;
   };
   /* {label,value}*/
-  TD.toggle= function(opts) {
+  TD.toggle = function(opts) {
     var pressed = opts.value?1:0;
     var el = setup(opts,toElement('<div class="td td_toggle" pressed="'+pressed+'"><span>'+opts.label+'</span><div class="td_toggle_a"><div class="td_toggle_b"/></div></div>'));
     el.toggle = true;
@@ -101,7 +101,7 @@ var TD = {};
   };
   /* {label,value,step,min,max}
     if step is specified, clickable up/down arrows are added */
-  TD.value= function(opts) {
+  TD.value = function(opts) {
     var html;
     opts.value = parseFloat(opts.value);
     if (opts.step)
@@ -130,11 +130,11 @@ var TD = {};
     return el;
   };
   /* {label,value,min,max}*/
-  TD.guage= function(opts) {
+  TD.gauge = function(opts) {
     var v = (opts.value===undefined)?0:opts.value;
     var min = (opts.min===undefined)?0:opts.min;
     var max = (opts.max===undefined)?1:opts.max;
-    var el = setup(opts,toElement('<div class="td td_guage"><span>'+opts.label+'</span><canvas></canvas><div class="td_guage_a">'+v+'</div></div>'));
+    var el = setup(opts,toElement('<div class="td td_gauge"><span>'+opts.label+'</span><canvas></canvas><div class="td_gauge_a">'+v+'</div></div>'));
     el.value = v;
     var c = el.getElementsByTagName("canvas")[0];
     var ctx = c.getContext("2d");
@@ -162,13 +162,13 @@ var TD = {};
     el.onresize = draw;
     el.setValue = function(v) {
       el.value = v;
-      el.getElementsByClassName("td_guage_a")[0].innerHTML = formatText(v);
+      el.getElementsByClassName("td_gauge_a")[0].innerHTML = formatText(v);
       draw();
     };
     return el;
   };
   /* {label}*/
-  TD.graph= function(opts) {
+  TD.graph = function(opts) {
     var el = setup(opts,toElement('<div class="td td_graph"><span>'+opts.label+'</span><canvas></canvas></div>'));
     var c = el.getElementsByTagName("canvas")[0];
     var ctx = c.getContext("2d");
@@ -228,7 +228,7 @@ var TD = {};
   /* {label,text}
     text = newline separated linex
   */
-  TD.log= function(opts) {
+  TD.log = function(opts) {
     if (!opts.text) opts.text="";
     var el = setup(opts,toElement('<div class="td td_log"><span>'+opts.label+'</span><div class="td_log_a td_scrollable"></div></div>'));
     el.update = function() {
@@ -246,7 +246,7 @@ var TD = {};
     return el;
   };
   /* {label}*/
-  TD.modal= function(opts) {
+  TD.modal = function(opts) {
     var el = setup(opts,toElement('<div class="td td_modal"><span>'+opts.label+'</span></div>'));
     el.onclick = function() {
       togglePressed(el);
