@@ -187,16 +187,18 @@ var TD = {};
       ctx.fillStyle = "#000";
       ctx.fillRect(4,24,c.width-8,c.height-28);
       var dxmin,dxmax,dymin,dymax;
-      if (el.opts.data) {
+      if (el.opts.data !== undefined) {
         var traces = ("object"==typeof el.opts.data[0]) ?
           el.opts.data : [el.opts.data];
         traces.forEach(function(trace) {
-          trace.forEach(function(v,i) {
+          for (var i in trace) {
+            i = parseFloat(i);
+            var v = parseFloat(trace[i]);
             if (dxmin===undefined || i<dxmin) dxmin=i;
             if (dxmax===undefined || i>dxmax) dxmax=i;
             if (dymin===undefined || v<dymin) dymin=v;
             if (dymax===undefined || v>dymax) dymax=v;
-          });
+          }
         });
         var dxs = dxmax+1-dxmin;
         var dys = dymax-dymin;
@@ -206,8 +208,8 @@ var TD = {};
           ctx.beginPath();
           ctx.strokeStyle = (traces.length>1) ? "hsl("+(idx*360/traces.length)+", 100%, 50%)" : LIGHTCOL;
           for (var i in trace) {
-            var v = trace[i];
-            ctx.lineTo(xbase+(xs*(i-dxmin)/dxs),
+            var v = parseFloat(trace[i]);
+            ctx.lineTo(xbase+(xs*(parseFloat(i)-dxmin)/dxs),
                        ybase-(ys*(v-dymin)/dys));
           }
           ctx.stroke();
