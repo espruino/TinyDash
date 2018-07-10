@@ -188,25 +188,30 @@ var TD = {};
       ctx.fillRect(4,24,c.width-8,c.height-28);
       var dxmin,dxmax,dymin,dymax;
       if (el.opts.data) {
-        for (var i in el.opts.data) {
-          var v = el.opts.data[i];
-          if (dxmin===undefined || i<dxmin) dxmin=i;
-          if (dxmax===undefined || i>dxmax) dxmax=i;
-          if (dymin===undefined || v<dymin) dymin=v;
-          if (dymax===undefined || v>dymax) dymax=v;
-        }
-        var dxs = dxmax-dxmin;
+        var traces = ("object"==typeof el.opts.data[0]) ?
+          el.opts.data : [el.opts.data];
+        traces.forEach(function(trace) {
+          trace.forEach(function(v,i) {
+            if (dxmin===undefined || i<dxmin) dxmin=i;
+            if (dxmax===undefined || i>dxmax) dxmax=i;
+            if (dymin===undefined || v<dymin) dymin=v;
+            if (dymax===undefined || v>dymax) dymax=v;
+          });
+        });
+        var dxs = dxmax+1-dxmin;
         var dys = dymax-dymin;
         if (dxs==0) dxs=1;
         if (dys==0) dys=1;
-        ctx.beginPath();
-        ctx.strokeStyle = LIGHTCOL;
-        for (var i in el.opts.data) {
-          var v = el.opts.data[i];
-          ctx.lineTo(xbase+(xs*(i-dxmin)/dxs),
-                     ybase-(ys*(v-dymin)/dys));
-        }
-        ctx.stroke();
+        traces.forEach(function(trace, idx) {
+          ctx.beginPath();
+          ctx.strokeStyle = (traces.length>1) ? "hsl("+(idx*360/traces.length)+", 100%, 50%)" : LIGHTCOL;
+          for (var i in trace) {
+            var v = trace[i];
+            ctx.lineTo(xbase+(xs*(i-dxmin)/dxs),
+                       ybase-(ys*(v-dymin)/dys));
+          }
+          ctx.stroke();
+        });
       } else {
         ctx.fillStyle = "#888";
         ctx.textAlign = "center";
@@ -237,7 +242,8 @@ var TD = {};
     el.log = function(txt) {
       opts.text += "\n"+txt;
       el.update();
-      el.scrollTo(0,el.scrollHeight)
+      var e = el.getElementsByClassName("td_log_a")[0];
+      e.scrollTop = e.scrollHeight;
     };
     el.clear = function() {
       opts.text = "";
