@@ -113,7 +113,7 @@ var TD = {};
       if (opts.min && v<opts.min) v=opts.min;
       if (opts.max && v>opts.max) v=opts.max;
       if (opts.value != v) {
-        sendChanges(el, el.pressed);
+        sendChanges(el, v);
         opts.value = v;
       }
       el.getElementsByClassName("td_val_a")[0].innerHTML = formatText(v);
